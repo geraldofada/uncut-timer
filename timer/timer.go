@@ -5,11 +5,11 @@ import "time"
 // A Timer represents the main struct wich
 // saves the start date and end date
 type Timer struct {
-	id      int
-	name    string
-	start   time.Time
-	end     time.Time
-	elapsed time.Duration
+	Id      int
+	Name    string
+	Start   time.Time
+	End     time.Time
+	Elapsed time.Duration
 }
 
 // Start initializes a struct Timer
@@ -27,8 +27,8 @@ func Start(id int, name string) *Timer {
 // of a Timer
 func Stop(t *Timer) *Timer {
 	now := time.Now()
-	t.end = now
-	t.elapsed = t.end.Sub(t.start)
+	t.End = now
+	t.Elapsed = t.End.Sub(t.Start)
 
 	return t
 }

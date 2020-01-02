@@ -8,24 +8,24 @@ import (
 func TestStart(t *testing.T) {
 	timer := Start(1, "test timer")
 
-	if timer.id != 1 {
-		t.Errorf("Expected id to be 1, got %d", timer.id)
+	if timer.Id != 1 {
+		t.Errorf("Expected id to be 1, got %d", timer.Id)
 	}
 
-	if timer.name != "test timer" {
-		t.Errorf("Expected name to be \"test timer\", got %s", timer.name)
+	if timer.Name != "test timer" {
+		t.Errorf("Expected name to be \"test timer\", got %s", timer.Name)
 	}
 
-	if timer.start != time.Now() {
-		t.Errorf("Expected start time to be %s, got %s", time.Now(), timer.start)
+	if timer.Start != time.Now() {
+		t.Errorf("Expected start time to be %s, got %s", time.Now(), timer.Start)
 	}
 
-	if !timer.end.IsZero() {
-		t.Errorf("Expected end time to be %s, got %s", time.Time{}, timer.end)
+	if !timer.End.IsZero() {
+		t.Errorf("Expected end time to be %s, got %s", time.Time{}, timer.End)
 	}
 
-	if timer.elapsed != 0 {
-		t.Errorf("Expected elapsed time to be 0, got %d", timer.elapsed)
+	if timer.Elapsed != 0 {
+		t.Errorf("Expected elapsed time to be 0, got %d", timer.Elapsed)
 	}
 }
 
@@ -36,13 +36,13 @@ func TestStop(t *testing.T) {
 
 	Stop(timer)
 
-	if timer.end != time.Now() {
-		t.Errorf("Expected end time to be %s, got %s", time.Now(), timer.end)
+	if timer.End != time.Now() {
+		t.Errorf("Expected end time to be %s, got %s", time.Now(), timer.End)
 	}
 
-	if timer.elapsed != timer.end.Sub(timer.start) {
+	if timer.Elapsed != timer.End.Sub(timer.Start) {
 		t.Errorf("Expected elapsed time to be %s, got %s",
-			timer.end.Sub(timer.start),
-			timer.elapsed)
+			timer.End.Sub(timer.Start),
+			timer.Elapsed)
 	}
 }
