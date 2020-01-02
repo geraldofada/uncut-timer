@@ -8,8 +8,8 @@ import (
 func TestStart(t *testing.T) {
 	timer := Start(1, "test timer")
 
-	if timer.Id != 1 {
-		t.Errorf("Expected id to be 1, got %d", timer.Id)
+	if timer.ID != 1 {
+		t.Errorf("Expected id to be 1, got %d", timer.ID)
 	}
 
 	if timer.Name != "test timer" {

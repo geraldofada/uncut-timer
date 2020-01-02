@@ -5,7 +5,7 @@ import "time"
 // A Timer represents the main struct wich
 // saves the start date and end date
 type Timer struct {
-	Id      int
+	ID      int
 	Name    string
 	Start   time.Time
 	End     time.Time
