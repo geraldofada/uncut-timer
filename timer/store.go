@@ -23,9 +23,9 @@ func Save(t []*Timer, path string) error {
 	return nil
 }
 
-// Read returns a struct timer from a given bin file
-func Read(id int, path string) (*Timer, error) {
-	file, err := os.Open(path)
+// Get returns a struct timer from a given bin file
+func Get(id int, path string) (*Timer, error) {
+	file, err := os.OpenFile(path, os.O_CREATE|os.O_RDONLY, 0666)
 	defer file.Close()
 	if err != nil {
 		return nil, err
@@ -41,9 +41,9 @@ func Read(id int, path string) (*Timer, error) {
 	return t[id], nil
 }
 
-// Get returns a list of Timers
-func Get(path string) ([]*Timer, error) {
-	file, err := os.Open(path)
+// Read returns a list of Timers
+func Read(path string) ([]*Timer, error) {
+	file, err := os.OpenFile(path, os.O_CREATE|os.O_RDONLY, 0666)
 	defer file.Close()
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func Get(path string) ([]*Timer, error) {
 
 // Remove removes a Timer from a given bin file
 func Remove(id int, path string) error {
-	file, err := os.Open(path)
+	file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, 0666)
 	defer file.Close()
 	if err != nil {
 		return nil
@@ -74,7 +74,7 @@ func Remove(id int, path string) error {
 		return err
 	}
 
-	t = append(t[:id], t[id+1:]...)
+	t = append(t[:id], t[id+1])
 
 	err = Save(t, path)
 	if err != nil {
