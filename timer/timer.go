@@ -10,6 +10,7 @@ type Timer struct {
 	Start   time.Time
 	End     time.Time
 	Elapsed time.Duration
+	Stopped bool
 }
 
 // Start initializes a struct Timer
@@ -17,7 +18,7 @@ type Timer struct {
 func Start(id int, name string) *Timer {
 	now := time.Now()
 	t := &Timer{
-		id, name, now, time.Time{}, 0,
+		id, name, now, time.Time{}, 0, false,
 	}
 
 	return t
@@ -29,6 +30,7 @@ func Stop(t *Timer) *Timer {
 	now := time.Now()
 	t.End = now
 	t.Elapsed = t.End.Sub(t.Start)
+	t.Stopped = true
 
 	return t
 }

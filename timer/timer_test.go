@@ -27,6 +27,10 @@ func TestStart(t *testing.T) {
 	if timer.Elapsed != 0 {
 		t.Errorf("Expected elapsed time to be 0, got %d", timer.Elapsed)
 	}
+
+	if timer.Stopped != false {
+		t.Errorf("Expected Stopped filed to be false, got %t", timer.Stopped)
+	}
 }
 
 func TestStop(t *testing.T) {
@@ -44,5 +48,9 @@ func TestStop(t *testing.T) {
 		t.Errorf("Expected elapsed time to be %s, got %s",
 			timer.End.Sub(timer.Start),
 			timer.Elapsed)
+	}
+
+	if timer.Stopped != true {
+		t.Errorf("Expected stopped field to be true, got %t", timer.Stopped)
 	}
 }
