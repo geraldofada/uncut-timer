@@ -41,6 +41,24 @@ func Read(id int, path string) (*Timer, error) {
 	return t[id], nil
 }
 
+// Get returns a list of Timers
+func Get(path string) ([]*Timer, error) {
+	file, err := os.Open(path)
+	defer file.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	var t []*Timer
+	dec := gob.NewDecoder(file)
+	err = dec.Decode(&t)
+	if err != nil {
+		return nil, err
+	}
+
+	return t, nil
+}
+
 // Remove removes a Timer from a given bin file
 func Remove(id int, path string) error {
 	file, err := os.Open(path)
