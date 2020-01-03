@@ -32,10 +32,14 @@ func Get(id int, path string) (*Timer, error) {
 	}
 
 	var t []*Timer
-	dec := gob.NewDecoder(file)
-	err = dec.Decode(&t)
-	if err != nil {
-		return nil, err
+
+	stat, _ := file.Stat()
+	if stat.Size() > 0 {
+		dec := gob.NewDecoder(file)
+		err = dec.Decode(&t)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return t[id], nil
@@ -50,10 +54,14 @@ func Read(path string) ([]*Timer, error) {
 	}
 
 	var t []*Timer
-	dec := gob.NewDecoder(file)
-	err = dec.Decode(&t)
-	if err != nil {
-		return nil, err
+
+	stat, _ := file.Stat()
+	if stat.Size() > 0 {
+		dec := gob.NewDecoder(file)
+		err = dec.Decode(&t)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return t, nil
@@ -68,17 +76,21 @@ func Remove(id int, path string) error {
 	}
 
 	var t []*Timer
-	dec := gob.NewDecoder(file)
-	err = dec.Decode(&t)
-	if err != nil {
-		return err
-	}
 
-	t = append(t[:id], t[id+1])
+	stat, _ := file.Stat()
+	if stat.Size() > 0 {
+		dec := gob.NewDecoder(file)
+		err = dec.Decode(&t)
+		if err != nil {
+			return err
+		}
 
-	err = Save(t, path)
-	if err != nil {
-		return err
+		t = append(t[:id], t[id+1])
+
+		err = Save(t, path)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
