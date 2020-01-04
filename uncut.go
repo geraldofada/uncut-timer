@@ -76,11 +76,41 @@ func main() {
 			Name:    "stop",
 			Usage:   "Stops a timer and save its data",
 			Aliases: []string{"x"},
+			Flags: []cli.Flag{
+				&cli.IntFlag{
+					Name:     "id",
+					Usage:    "Used to stop the timer with the given id",
+					Aliases:  []string{"i"},
+					Required: true,
+				},
+			},
+			Action: func(c *cli.Context) error {
+				err := cmd.CliStop(c.Int("id"))
+				if err != nil {
+					return err
+				}
+
+				return nil
+			},
 		},
 		{
 			Name:    "remove",
 			Usage:   "Removes an ongoing timer",
 			Aliases: []string{"r"},
+			Flags: []cli.Flag{
+				&cli.BoolFlag{
+					Name:    "finished",
+					Usage:   "Removes a finished instead of an ongoing timer",
+					Aliases: []string{"f"},
+					Value:   false,
+				},
+				&cli.IntFlag{
+					Name:     "id",
+					Usage:    "Used to remove the timer with the given id",
+					Aliases:  []string{"i"},
+					Required: true,
+				},
+			},
 		},
 	}
 

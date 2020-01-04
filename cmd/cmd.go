@@ -14,7 +14,7 @@ func CliStart(name string) error {
 		return err
 	}
 
-	newTimer := timer.Start(len(timers), name)
+	newTimer := timer.Start(name)
 
 	timers = append(timers, newTimer)
 
@@ -24,9 +24,9 @@ func CliStart(name string) error {
 	}
 
 	if newTimer.Name != "" {
-		fmt.Printf("Timer [%d]: %s, started at: %s\n", newTimer.ID, newTimer.Name, newTimer.Start)
+		fmt.Printf("[%d]: %s, started at: %s\n", len(timers)-1, newTimer.Name, newTimer.Start)
 	} else {
-		fmt.Printf("Timer [%d] started at: %s\n", newTimer.ID, newTimer.Start)
+		fmt.Printf("Timer [%d] started at: %s\n", len(timers)-1, newTimer.Start)
 	}
 
 	return nil
@@ -45,11 +45,11 @@ func CliList(id int, path string) error {
 		return errors.New("This timer does not exists")
 	}
 
-	for _, timer := range timers {
+	for i, timer := range timers {
 		if timer.Name != "" {
-			fmt.Printf("Timer [%d]: %s\n", timer.ID, timer.Name)
+			fmt.Printf("[%d]: %s\n", i, timer.Name)
 		} else {
-			fmt.Printf("Timer [%d]\n", timer.ID)
+			fmt.Printf("Timer [%d]\n", i)
 		}
 
 		fmt.Printf("\tStarted at: %s\n", timer.Start)
@@ -59,5 +59,44 @@ func CliList(id int, path string) error {
 			fmt.Printf("\tTotal time: %s\n", timer.Elapsed)
 		}
 	}
+	return nil
+}
+
+// CliStop is the function running on the stop command
+func CliStop(id int) error {
+	ongoing, err := timer.Read("ongoing")
+	if err != nil {
+		return nil
+	}
+
+	if id >= len(ongoing) {
+		return errors.New("This timer does not exists")
+	}
+
+	finished, err := timer.Read("finished")
+	if err != nil {
+		return err
+	}
+
+	err = timer.Remove(id, "ongoing")
+	if err != nil {
+		return err
+	}
+
+	timer.Stop(ongoing[id])
+
+	finished = append(finished, ongoing[id])
+
+	err = timer.Save(finished, "finished")
+	if err != nil {
+		return err
+	}
+
+	if ongoing[id].Name != "" {
+		fmt.Printf("[%d]: %s, stopped at: %s", id, ongoing[id].Name, ongoing[id].End)
+	} else {
+		fmt.Printf("Timer [%d] stopped at: %s", id, ongoing[id].End)
+	}
+
 	return nil
 }
