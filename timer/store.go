@@ -69,7 +69,7 @@ func Read(path string) ([]*Timer, error) {
 
 // Remove removes a Timer from a given bin file
 func Remove(id int, path string) error {
-	file, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY, 0666)
+	file, err := os.OpenFile(path, os.O_CREATE|os.O_RDONLY, 0666)
 	defer file.Close()
 	if err != nil {
 		return nil
@@ -85,7 +85,7 @@ func Remove(id int, path string) error {
 			return err
 		}
 
-		t = append(t[:id], t[id+1])
+		t = append(t[:id], t[id+1:]...)
 
 		err = Save(t, path)
 		if err != nil {
