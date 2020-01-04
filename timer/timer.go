@@ -5,7 +5,6 @@ import "time"
 // A Timer represents the main struct wich
 // saves the start date and end date
 type Timer struct {
-	ID      int
 	Name    string
 	Start   time.Time
 	End     time.Time
@@ -15,10 +14,10 @@ type Timer struct {
 
 // Start initializes a struct Timer
 // with the current date
-func Start(id int, name string) *Timer {
+func Start(name string) *Timer {
 	now := time.Now()
 	t := &Timer{
-		id, name, now, time.Time{}, 0, false,
+		name, now, time.Time{}, 0, false,
 	}
 
 	return t
@@ -26,11 +25,9 @@ func Start(id int, name string) *Timer {
 
 // Stop sets the end time and elapsed time
 // of a Timer
-func Stop(t *Timer) *Timer {
+func Stop(t *Timer) {
 	now := time.Now()
 	t.End = now
 	t.Elapsed = t.End.Sub(t.Start)
 	t.Stopped = true
-
-	return t
 }

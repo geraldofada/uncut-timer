@@ -6,11 +6,7 @@ import (
 )
 
 func TestStart(t *testing.T) {
-	timer := Start(1, "test timer")
-
-	if timer.ID != 1 {
-		t.Errorf("Expected id to be 1, got %d", timer.ID)
-	}
+	timer := Start("test timer")
 
 	if timer.Name != "test timer" {
 		t.Errorf("Expected name to be \"test timer\", got %s", timer.Name)
@@ -34,7 +30,7 @@ func TestStart(t *testing.T) {
 }
 
 func TestStop(t *testing.T) {
-	timer := Start(1, "test timer")
+	timer := Start("test timer")
 
 	time.Sleep(5 * time.Millisecond)
 
