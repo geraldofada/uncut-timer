@@ -100,7 +100,7 @@ func main() {
 			Flags: []cli.Flag{
 				&cli.BoolFlag{
 					Name:    "finished",
-					Usage:   "Removes a finished instead of an ongoing timer",
+					Usage:   "Removes a finished timer instead of an ongoing timer",
 					Aliases: []string{"f"},
 					Value:   false,
 				},
@@ -110,6 +110,20 @@ func main() {
 					Aliases:  []string{"i"},
 					Required: true,
 				},
+			},
+			Action: func(c *cli.Context) error {
+				var err error
+				if c.Bool("f") {
+					err = cmd.CliRemove(c.Int("id"), "finished")
+				} else {
+					err = cmd.CliRemove(c.Int("id"), "ongoing")
+				}
+
+				if err != nil {
+					return err
+				}
+
+				return nil
 			},
 		},
 	}

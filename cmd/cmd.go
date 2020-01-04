@@ -93,9 +93,34 @@ func CliStop(id int) error {
 	}
 
 	if ongoing[id].Name != "" {
-		fmt.Printf("[%d]: %s, stopped at: %s", id, ongoing[id].Name, ongoing[id].End)
+		fmt.Printf("[%d]: %s, stopped at: %s\n", id, ongoing[id].Name, ongoing[id].End)
 	} else {
-		fmt.Printf("Timer [%d] stopped at: %s", id, ongoing[id].End)
+		fmt.Printf("Timer [%d] stopped at: %s\n", id, ongoing[id].End)
+	}
+
+	return nil
+}
+
+// CliRemove is the function running on cmd remove
+func CliRemove(id int, path string) error {
+	timers, err := timer.Read(path)
+	if err != nil {
+		return err
+	}
+
+	if id >= len(timers) {
+		return errors.New("This timer does not exists")
+	}
+
+	err = timer.Remove(id, path)
+	if err != nil {
+		return err
+	}
+
+	if timers[id].Name != "" {
+		fmt.Printf("[%d]: %s, removed\n", id, timers[id].Name)
+	} else {
+		fmt.Printf("Timer [%d] removed\n", id)
 	}
 
 	return nil
