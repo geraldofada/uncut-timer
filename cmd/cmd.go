@@ -7,9 +7,18 @@ import (
 	"github.com/geraldofada/uncut-timer/timer"
 )
 
+// OngoingFileName is a constant for the ongoing file name
+const OngoingFileName = "ongoing"
+
+// FinishedFileName is a constant for the finished file name
+const FinishedFileName = "finished"
+
+// ExportedFileName is a constant for the exported file name
+const ExportedFileName = "exported"
+
 // CliStart is the function running on the start command
 func CliStart(name string) error {
-	timers, err := timer.Read("ongoing")
+	timers, err := timer.Read(OngoingFileName)
 	if err != nil {
 		return err
 	}
@@ -18,7 +27,7 @@ func CliStart(name string) error {
 
 	timers = append(timers, newTimer)
 
-	err = timer.Save(timers, "ongoing")
+	err = timer.Save(timers, OngoingFileName)
 	if err != nil {
 		return err
 	}
@@ -64,7 +73,7 @@ func CliList(id int, path string) error {
 
 // CliStop is the function running on the stop command
 func CliStop(id int) error {
-	ongoing, err := timer.Read("ongoing")
+	ongoing, err := timer.Read(OngoingFileName)
 	if err != nil {
 		return nil
 	}
@@ -73,12 +82,12 @@ func CliStop(id int) error {
 		return errors.New("This timer does not exists")
 	}
 
-	finished, err := timer.Read("finished")
+	finished, err := timer.Read(FinishedFileName)
 	if err != nil {
 		return err
 	}
 
-	err = timer.Remove(id, "ongoing")
+	err = timer.Remove(id, OngoingFileName)
 	if err != nil {
 		return err
 	}
@@ -87,7 +96,7 @@ func CliStop(id int) error {
 
 	finished = append(finished, ongoing[id])
 
-	err = timer.Save(finished, "finished")
+	err = timer.Save(finished, FinishedFileName)
 	if err != nil {
 		return err
 	}
@@ -121,6 +130,21 @@ func CliRemove(id int, path string) error {
 		fmt.Printf("[%d]: %s, removed\n", id, timers[id].Name)
 	} else {
 		fmt.Printf("Timer [%d] removed\n", id)
+	}
+
+	return nil
+}
+
+// CliExport is the function running on cmd export
+func CliExport(path string) error {
+	timers, err := timer.Read(FinishedFileName)
+	if err != nil {
+		return err
+	}
+
+	err = timer.Export(timers, path)
+	if err != nil {
+		return err
 	}
 
 	return nil

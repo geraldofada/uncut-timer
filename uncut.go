@@ -60,9 +60,9 @@ func main() {
 				var err error
 
 				if c.Bool("finished") {
-					err = cmd.CliList(c.Int("id"), "finished")
+					err = cmd.CliList(c.Int("id"), cmd.FinishedFileName)
 				} else {
-					err = cmd.CliList(c.Int("id"), "ongoing")
+					err = cmd.CliList(c.Int("id"), cmd.OngoingFileName)
 				}
 
 				if err != nil {
@@ -114,11 +114,24 @@ func main() {
 			Action: func(c *cli.Context) error {
 				var err error
 				if c.Bool("f") {
-					err = cmd.CliRemove(c.Int("id"), "finished")
+					err = cmd.CliRemove(c.Int("id"), cmd.FinishedFileName)
 				} else {
-					err = cmd.CliRemove(c.Int("id"), "ongoing")
+					err = cmd.CliRemove(c.Int("id"), cmd.OngoingFileName)
 				}
 
+				if err != nil {
+					return err
+				}
+
+				return nil
+			},
+		},
+		{
+			Name:    "export",
+			Usage:   "Exports the finished timers to a csv file",
+			Aliases: []string{"e"},
+			Action: func(c *cli.Context) error {
+				err := cmd.CliExport(cmd.ExportedFileName)
 				if err != nil {
 					return err
 				}
