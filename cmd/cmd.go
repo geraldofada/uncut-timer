@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/geraldofada/uncut-timer/timer"
 )
@@ -43,6 +44,8 @@ func CliStart(name string) error {
 
 // CliList is the function running on the list command
 func CliList(id int, path string) error {
+	today := time.Now()
+
 	timers, err := timer.Read(path)
 	if err != nil {
 		return err
@@ -66,6 +69,8 @@ func CliList(id int, path string) error {
 		if timer.Stopped {
 			fmt.Printf("\tStopped at: %s\n", timer.End)
 			fmt.Printf("\tTotal time: %s\n", timer.Elapsed)
+		} else {
+			fmt.Printf("\tElapsed time: %s\n", today.Sub(timer.Start))
 		}
 	}
 	return nil
